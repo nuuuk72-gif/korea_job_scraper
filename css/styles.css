@@ -1,0 +1,32 @@
+h1 {
+    color: #3155A6;
+    font-weight: 700;
+}
+
+.job-card {
+    border: 1px solid #e5e5e5;
+    padding: 16px;
+    margin: 20px 0;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.job-title {
+    color: #3155A6;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.job-link {
+    color: #3155A6;
+    font-weight: 500;
+    text-decoration: none;
+}
+body {
+    font-family: "Noto Sans JP", sans-serif;
+}
+#korea {
+    color:aquamarine;
+    background-color:grey;
+}

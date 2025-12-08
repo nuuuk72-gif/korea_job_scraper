@@ -8,9 +8,9 @@ import csv
 # -----------------------------------------------
 # 1. Chrome を起動（ヘッドレス可）
 # -----------------------------------------------
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # ブラウザ非表示
-options.add_argument("--no-sandbox")
+options = webdriver.ChromeOptions() #options : ChromeOptions のオブジェクト
+options.add_argument("--headless")  # ブラウザ非表示 "--headless":Chrome に渡す実際の引数（フラグ）
+options.add_argument("--no-sandbox") #.add_argument(): そのオブジェクトに引数を足すメソッド
 options.add_argument("--disable-dev-shm-usage")
 
 driver = webdriver.Chrome(options=options)
@@ -27,8 +27,9 @@ driver.get(url)
 # -----------------------------------------------
 try:
     job_cards = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".job-card"))
-    )
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".job-card")) 
+        #指定したセレクタに一致する要素が ページのどこかに存在する状態になるまで待つ
+    ) #.job-card の要素が出てくるまで、最大10秒待つ
 except:
     job_cards = []
 
@@ -48,22 +49,34 @@ for job in job_cards:
     except:
         company = ""
     try:
-        location = job.find_element(By.CSS_SELECTOR, ".job-location").text
+        location = job.find_element(By.CSS_SELECTOR, ".location").text
     except:
         location = ""
+    try:
+        salary = job.find_element(By.CSS_SELECTOR, ".salary").text
+    except:
+        salary = ""
+    try:
+        description = job.find_element(By.CSS_SELECTOR, ".company-description").text
+    except:
+        description = ""
+    try:
+        tags = [tag.text for tag in job.find_elements(By.CSS_SELECTOR, ".tags .tag")]
+    except:
+        tags = []
     try:
         link = job.find_element(By.CSS_SELECTOR, "a").get_attribute("href")
     except:
         link = ""
     
-    results.append([title, company, location, link])
+    results.append([title, company, location, salary, description, tags, link])
 
 # -----------------------------------------------
 # 5. CSV に保存
 # -----------------------------------------------
 with open("C:/Users/user/my_project/python/korea_job_scraper/jobs.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
-    writer.writerow(["タイトル", "企業名", "勤務地", "URL"])
+    writer.writerow(["タイトル", "企業名", "勤務地", "給与","説明", "タグ", "URL"])
     writer.writerows(results)
 
 print("🎉 Selenium でのスクレイピング完了！ jobs.csv を確認してね！")
