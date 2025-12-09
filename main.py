@@ -35,10 +35,21 @@ except:
 
 print(f"求人カード数: {len(job_cards)}")  # ←ここで件数確認
 
+try:
+    korea_job_cards = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#korea")) 
+        #指定したセレクタに一致する要素が ページのどこかに存在する状態になるまで待つ
+    ) #.job-card の要素が出てくるまで、最大10秒待つ
+except:
+    korea_job_cards = []
+
+print(f"韓国に関する求人カード数: {len(korea_job_cards)}")
+
 # -----------------------------------------------
 # 4. 求人情報取得
 # -----------------------------------------------
 results = []
+koreaResults = []
 for job in job_cards:
     try:
         title = job.find_element(By.CSS_SELECTOR, ".job-title").text
@@ -65,21 +76,37 @@ for job in job_cards:
     except:
         tags = []
     try:
+        korea_tags = [korea_tag.text for korea_tag in job.find_elements(By.CSS_SELECTOR, "#korea")]
+    except:
+        korea_tags = []
+    try:
+        emojis = [emoji.text for emoji in job.find_elements(By.CSS_SELECTOR, ".emojis .emoji")]
+    except:
+        emojis = []
+    try:
         link = job.find_element(By.CSS_SELECTOR, "a").get_attribute("href")
     except:
         link = ""
     
-    results.append([title, company, location, salary, description, tags, link])
+    results.append([title, company, location, salary, description, tags, emojis, link])
+    koreaResults.append([title, company, korea_tags, link])
 
 # -----------------------------------------------
 # 5. CSV に保存
 # -----------------------------------------------
 with open("C:/Users/user/my_project/python/korea_job_scraper/jobs.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
-    writer.writerow(["タイトル", "企業名", "勤務地", "給与","説明", "タグ", "URL"])
+    writer.writerow(["タイトル", "企業名", "勤務地", "給与","説明", "タグ", "絵文字","URL"])
     writer.writerows(results)
 
 print("🎉 Selenium でのスクレイピング完了！ jobs.csv を確認してね！")
+
+with open("C:/Users/user/my_project/python/korea_job_scraper/korea.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["タイトル", "企業名", "タグ", "URL"])
+    writer.writerows(koreaResults)
+
+print("💙韓国に関する会社のスクレイピング完了(⋈◍＞◡＜◍)。✧♡💙")
 
 # -----------------------------------------------
 # 6. ブラウザを閉じる
