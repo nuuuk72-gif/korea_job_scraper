@@ -7,4 +7,4 @@ df = pd.read_csv("C:/Users/user/my_project/python/korea_job_scraper/jobs.csv", e
 print(df.head())
 print("件数:", len(df))
 print(df.columns)
-print(df.head())
+print(df.info())
