@@ -26,7 +26,7 @@ h1 {
 body {
     font-family: "Noto Sans JP", sans-serif;
 }
-#korea {
-    color:aquamarine;
+.tag {
+    color:white;
     background-color:grey;
 }
