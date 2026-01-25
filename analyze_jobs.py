@@ -85,14 +85,18 @@ plt.rcParams["font.family"] = "MS Gothic"
 fig, ax1 = plt.subplots(figsize=(10, 6))
 
 # 棒グラフ（全体）
-pref_total.plot(kind="bar", ax=ax1)
+pref_total.plot(kind="bar", ax=ax1, color="skyblue")
 ax1.set_ylabel("総求人数")
 ax1.set_xlabel("都道府県")
 
 # 線グラフ（韓国求人）
 ax2 = ax1.twinx()
-pref_korea.plot(kind="line", ax=ax2, marker="o")
+pref_korea.plot(kind="line", ax=ax2, marker="o", color="pink")
 ax2.set_ylabel("韓国関連求人数")
+
+y_max = max(pref_total.max(), pref_korea.max()) + 2.5
+ax1.set_ylim(0, y_max)
+ax2.set_ylim(0, y_max)
 
 plt.title("都道府県別 求人数（韓国求人分布）")
 plt.tight_layout()
