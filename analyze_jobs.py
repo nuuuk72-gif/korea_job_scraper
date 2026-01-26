@@ -86,12 +86,16 @@ fig, ax1 = plt.subplots(figsize=(10, 6))
 
 # 棒グラフ（全体）
 pref_total.plot(kind="bar", ax=ax1, color="skyblue")
+for i, v in enumerate(pref_total):
+    ax1.text(i, v, str(v), ha="center", va="bottom", fontsize=9)
 ax1.set_ylabel("総求人数")
 ax1.set_xlabel("都道府県")
 
 # 線グラフ（韓国求人）
 ax2 = ax1.twinx()
-pref_korea.plot(kind="line", ax=ax2, marker="o", color="pink")
+pref_korea.plot(kind="line", ax=ax2, marker="o", color="#EC008C")
+for i, v in enumerate(pref_korea):
+    ax2.text(i+0.07, v, str(v), ha="center", va="bottom", fontsize=9, color="#EC008C")
 ax2.set_ylabel("韓国関連求人数")
 
 y_max = max(pref_total.max(), pref_korea.max()) + 2.5
