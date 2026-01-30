@@ -106,5 +106,33 @@ plt.title("都道府県別 求人数（韓国求人分布）")
 plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "prefecture_korea_overlay.png"))
 
+# -----------------------------------------------
+# 4. 語学別求人数比較
+# -----------------------------------------------
+languages = ["韓国語", "英語", "中国語"]
 
+language_counts = {}
 
+for lang in languages:
+    count = (
+        df[target_cols]
+        .apply(lambda row: row.str.contains(lang, na=False).any(), axis=1)
+        .sum()
+    )
+    language_counts[lang] = count
+
+lang_df = pd.DataFrame.from_dict(
+    language_counts, orient="index", columns=["求人数"]
+)
+
+print(lang_df)
+
+plt.rcParams["font.family"] = "MS Gothic"
+
+lang_df.plot(kind="bar", legend=False, figsize=(6, 4))
+plt.title("語学別 求人数比較")
+plt.xlabel("語学")
+plt.ylabel("求人数")
+
+plt.tight_layout()
+plt.savefig(os.path.join(FIG_DIR, "language_counts.png"))
